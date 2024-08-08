@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom"; 
 import UserContext from "./UserContext";
 import NavbarContext from "../navbar-context";
 import { Fetchdata } from "../../hooks/getData";
@@ -7,7 +8,7 @@ import $ from "jquery";
 
 export default function UserState(props) {
   const { appURL } = useContext(NavbarContext);
-
+  const navigate = useNavigate();
   const initialValue = {
     testimonialID: "",
     fullName: "",
@@ -33,15 +34,31 @@ export default function UserState(props) {
   const [userList, setUserList] = useState([]);
   const [editPop, setEditPop] = useState(false);
   const [addPop, setAddPop] = useState(false);
+  const [removePop, setRemovePop] = useState(false);
   const [viewPop, setViewPop] = useState(false);
   const [viewList, setViewList] = useState(false);
+const [userId,setUserId]=useState("");
+const [userName,setUserName]=useState("");
+const [password,setPassword]=useState("");
+const [isAuthenticated,setIsAuthenticated]=useState(false);
 
   useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      setIsAuthenticated(true);
+    }
+    userBuddle();
     userLst();
-   userBuddle();
-  }, [addPop]);
-  
-
+    
+  }, []);
+  const login = (token) => {
+    localStorage.setItem('authToken', token);
+    setIsAuthenticated(true);
+  };
+  const logout = () => {
+    localStorage.removeItem('authToken');
+    setIsAuthenticated(false);
+  };
   const userLst = () => {
     const params = 
       {
@@ -87,9 +104,9 @@ export default function UserState(props) {
 
     Fetchdata(par).then((resp) => {
       if (resp.StatusCode === 200) {
-        const postResult = resp.Values ? resp.Values : "";
-        setUserList(postResult);
-        setOriginalList(postResult);
+        const postValue = resp.Values ? resp.Values : "";
+        setUserList(postValue);
+        setOriginalList(postValue);
       } else {
         setUserList([]);
         setOriginalList([]);
@@ -99,6 +116,7 @@ export default function UserState(props) {
 
     
   };
+  
 
   const handleEdit = (data) => {
     setFormValues({
@@ -154,6 +172,17 @@ export default function UserState(props) {
     setAllow(false);
     setVerified(false);
   };
+  const handleRemove=(id)=>{
+    setRemovePop(true)
+    setUserId(id)
+      // const updatedUserList = userList.filter((u) => u.TestimonialID !== id);
+      // setUserList(updatedUserList);
+    
+    
+    
+    //window.location.reload()
+    
+  }
 
   const editData = () => {
     const dataForm = {
@@ -250,6 +279,7 @@ export default function UserState(props) {
     });
 
   }
+  
 
   return (
     <UserContext.Provider
@@ -287,6 +317,7 @@ export default function UserState(props) {
         editData,
         isUploaded,
         setIsUploaded,
+        setUserList,
         typeFile,
         setTypeFile,
         image,
@@ -295,7 +326,21 @@ export default function UserState(props) {
         setAllow,
         verified,
         setVerified,
-        addData
+        addData,
+        handleRemove,
+        removePop,
+        setRemovePop,
+        setUserId,
+        userId,
+        userName,
+        setUserName,
+        password,
+        setPassword,
+        isAuthenticated,
+        setIsAuthenticated,
+        login,
+        logout,
+        navigate
       }}
     >
       {props.children}

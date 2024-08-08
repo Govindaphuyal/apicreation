@@ -1,9 +1,10 @@
 import React, { useContext, useState } from "react";
 import UserContext from "../context/userState/UserContext";
 import NavbarContext from "../context/navbar-context";
-import { AiOutlineEdit, AiOutlineEye,AiOutlinePlus } from "react-icons/ai";
+import { AiOutlineEdit, AiOutlineEye,AiOutlinePlus ,AiOutlineDelete,AiOutlineBackward} from "react-icons/ai";
 import DataTable from "react-data-table-component";
 import Spinner from "../loading/spinner";
+import RemoveUser  from "./RemoveUser.js";
 import EditUser from "./EditUser";
 import AddUser from "./AddUser.js";
 import ViewUser from "./ViewUser";
@@ -36,20 +37,29 @@ const User = () => {
     viewList,
     setViewList,
     handleEdit,
-    handleAdd
+    handleAdd,
+    handleRemove,
+    setRemovePop,
+    removePop,
+    navigate,
+    logout
   } = useContext(UserContext);
   const [imgPrv, setImgPrv] = useState(false);
   const [imagePre, setImagePre] = useState("");
   const { customStylesForImage } = useContext(NavbarContext);
   const [popUp, setPopUp] = useState(false);
   const[rowPrev,setRowprev]=useState([])
+  const handleLogout = () => {
+    logout();
+    navigate('/'); 
+  };
   const columns = [
     {
       name: "S.N.",
       grow: 0,
       center: true,
       width: "70px",
-      cell: (row, index) => index + 1,
+      cell: (row, index) => row.TestimonialID,
     },
     {
       name: "Image",
@@ -127,7 +137,15 @@ const User = () => {
               >
                 <AiOutlineEdit />
               </button>{" "}
-              
+
+              <button
+                type="button"
+                className="btn btn-sm editspan mx-1"
+                onClick={() => handleRemove(row.TestimonialID)}
+                uk-tooltip="Delete"
+              >
+                <AiOutlineDelete />
+              </button>{" "}
             </div>
           </>
         );
@@ -136,6 +154,14 @@ const User = () => {
   ];
   return (
     <div className="uk-container">
+    <button type="button"
+                className="btn btn-sm editspan mx-1"
+                onClick={() => handleAdd(rowPrev)}
+                uk-tooltip="Add"><AiOutlinePlus/></button>{" "}
+    <button type="button"
+                className="btn btn-sm editspan mx-1"
+                onClick={handleLogout}
+                uk-tooltip="back"><AiOutlineBackward /></button>{" "}
       <Toast />
       {loading ? (
         <Spinner />
@@ -175,10 +201,10 @@ const User = () => {
                         </div>
                       </div>
                     </div> */}
-                    <button type="button"
+                    {/* <button type="button"
                 className="btn btn-sm editspan mx-1"
                 onClick={() => handleAdd(rowPrev)}
-                uk-tooltip="Add"><AiOutlinePlus/></button>{" "}
+                uk-tooltip="Add"><AiOutlinePlus/></button>{" "} */}
             </>
           }
         />
@@ -188,6 +214,7 @@ const User = () => {
       <EditUser setEditPop={setEditPop} editPop={editPop} />
       <ViewUser viewList={viewList} viewPop={viewPop} setViewPop={setViewPop} />
        <AddUser setAddPop={setAddPop} addPop={addPop}/> 
+       <RemoveUser setRemovePop={setRemovePop} removePop={removePop}/>
       {imgPrv &&
         showImgPreview({
           img: imagePre,

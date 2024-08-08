@@ -49,15 +49,19 @@ const AddUser = ({ setAddPop, addPop }) => {
 
 
   function handleAddImageChange(e) {
-    console.log(e.target.value)
     e.preventDefault()
-        const { name, value } = e.target;
-        setFormValues({ ...formValues, [name]: value })
         if (e.target.files && e.target.files[0]) {
+          const file = e.target.files[0];
             let reader = new FileReader();
             reader.onload = function (e) {
                 setImage(e.target.result);
                 setIsUploaded(true);
+                
+        setFormValues((prevValues) => ({
+          ...prevValues,
+          image: reader.result
+        }));
+  reader.readAsDataURL(file);
   }
 }
   }
@@ -101,35 +105,28 @@ const AddUser = ({ setAddPop, addPop }) => {
   };
 
   const handleSubmit =(e) => {
-    console.log()
     // setFormErrors(validate(formValues));
     const errors = validate(formValues);
     setFormErrors(errors);
 
     if (Object.keys(errors).length === 0) {
-      setAddSubmit(true);
-      addData(formValues);
+      
       setAddSubmit(false);
+      addData(formValues);
+      setAddSubmit(true);
+      
       
       closePopUp();
       
     }
-    setImage(e.target.userImage)
-      setIsUploaded(e.target.userImage);
     
-    // setEditSubmit({
-    //   fullName:e.target.FullName,
-    //   email:e.target.Email,
-    //   comment:e.target.Comment,
-    //   comName:e.target.ComName,
-    //   position:e.target.Position
-      
-      
-    // })
+    
+    
+    
     //console.log(formValues);
    
     setIsUploaded(true);
-   setImage("")
+     setImage("")
     // if (Object.keys(errors).length === 0) {
     //   setEditSubmit(true);
     //   editData(formValues);
@@ -164,7 +161,7 @@ const AddUser = ({ setAddPop, addPop }) => {
       addData(formValues);
       setAddSubmit(true);
     }
-  }, [formErrors]);
+  }, [formErrors, addSubmit, formValues, addData]);
   return (
     <>
       <div className="popup-bg addUserPopBg">
@@ -334,7 +331,7 @@ const AddUser = ({ setAddPop, addPop }) => {
 
                         <img
                           id="uploaded-image"
-                          src={formValues.image}
+                          src={image}
                           draggable={false}
                           alt="uploaded-img"
                         />
