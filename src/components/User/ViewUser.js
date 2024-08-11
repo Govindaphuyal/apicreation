@@ -68,13 +68,14 @@ const ViewUser = ({ viewList, viewPop, setViewPop }) => {
                             className="fw-bold"
                             style={{ width: "max-content" }}
                           >
-                            {title}
+                            {title} 
                           </td>
                           <td
                             style={{
                               borderLeft: "1px solid rgb(225, 226, 227)",
                             }}
                           >
+                         
                             {body}
                           </td>
                         </tr>

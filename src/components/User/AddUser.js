@@ -110,9 +110,11 @@ const AddUser = ({ setAddPop, addPop }) => {
     setFormErrors(errors);
 
     if (Object.keys(errors).length === 0) {
-      
-      setAddSubmit(false);
-      addData(formValues);
+      const filteredFormValues = Object.fromEntries(
+        Object.entries(formValues).filter(([key, value]) => value !== null && value !== "")
+      );
+      //setAddSubmit(false);
+      addData(filteredFormValues);
       setAddSubmit(true);
       
       
@@ -339,52 +341,6 @@ const AddUser = ({ setAddPop, addPop }) => {
                     )}
                   </div>
                 </div>
-              </div>
-            </div>
-
-            <div className="row">
-              <div className="">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  id="allow"
-                  name="allow"
-                  checked={formValues.allow}
-                  style={{ marginTop: '10px', cursor: 'pointer' }}
-                />
-                <label
-                  className="form-check-label ms-1"
-                  htmlFor="allow"
-                  style={{
-                    fontSize: '14px',
-                    marginTop: '8px',
-                    cursor: 'pointer',
-                  }}
-                >
-                  Allow
-                </label>
-              </div>
-              <div className="">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  id="verified"
-                  name="verified"
-                
-                  checked={formValues.verified}
-                  style={{ marginTop: '10px', cursor: 'pointer' }}
-                />
-                <label
-                  className="form-check-label ms-1"
-                  htmlFor="verified"
-                  style={{
-                    fontSize: '14px',
-                    marginTop: '8px',
-                    cursor: 'pointer',
-                  }}
-                >
-                  Verify
-                </label>
               </div>
             </div>
           </div>

@@ -344,52 +344,7 @@ const EditUser = ({ setEditPop, editPop }) => {
                   </div>
                 </div>
               </div>
-              <div className="row">
-                <div className="">
-                  <input
-                    type="checkbox"
-                    className="form-check-input"
-                    id="allow"
-                    name="allow"
-                    onChange={handleAllowChange}
-                    checked={allow}
-                    style={{ marginTop: "10px", cursor: "pointer" }}
-                  />
-                  <label
-                    className="form-check-label ms-1"
-                    htmlFor="allow"
-                    style={{
-                      fontSize:"14px",
-                      marginTop: "8px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    Allow
-                  </label>
-                </div>
-                <div className=" ">
-                  <input
-                    type="checkbox"
-                    className="form-check-input"
-                    id="verified"
-                    name="verified"
-                    onChange={handleVerifyChange}
-                    checked={verified}
-                    style={{ marginTop: "10px", cursor: "pointer" }}
-                  />
-                  <label
-                    className="form-check-label ms-1"
-                    htmlFor="verified"
-                    style={{
-                      fontSize: "14px",
-                      marginTop: "8px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    Verify
-                  </label>
-                </div>
-              </div>
+              
             </div>
           </div>
 

@@ -1,7 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState,useMemo } from "react";
 import UserContext from "../context/userState/UserContext";
 import NavbarContext from "../context/navbar-context";
-import { AiOutlineEdit, AiOutlineEye,AiOutlinePlus ,AiOutlineDelete,AiOutlineBackward} from "react-icons/ai";
+import { AiOutlineEdit, AiOutlineEye,AiOutlinePlus ,AiOutlineDelete,AiOutlineBackward,AiOutlineLogout } from "react-icons/ai";
 import DataTable from "react-data-table-component";
 import Spinner from "../loading/spinner";
 import RemoveUser  from "./RemoveUser.js";
@@ -42,17 +42,24 @@ const User = () => {
     setRemovePop,
     removePop,
     navigate,
-    logout
+    logout,
+    handleLogout
   } = useContext(UserContext);
   const [imgPrv, setImgPrv] = useState(false);
   const [imagePre, setImagePre] = useState("");
   const { customStylesForImage } = useContext(NavbarContext);
   const [popUp, setPopUp] = useState(false);
   const[rowPrev,setRowprev]=useState([])
-  const handleLogout = () => {
-    logout();
-    navigate('/'); 
-  };
+  
+    
+  
+  const filteredUserList = useMemo(() => {
+    const userArray = Object.values(userList); 
+    return userArray.filter(row =>
+      row.FullName && row.Position && row.Email
+    );
+  }, [userList]);
+
   const columns = [
     {
       name: "S.N.",
@@ -66,7 +73,7 @@ const User = () => {
       center: true,
       width: "70px",
       selector: (row) => {
-        setRowprev(row)
+        setRowprev(row);
         return (
           <>
             <div className="staffContentLogo">
@@ -83,7 +90,8 @@ const User = () => {
             </div>
           </>
         );
-      },
+      }
+    
     },
     {
       name: "FullName",
@@ -142,7 +150,7 @@ const User = () => {
                 type="button"
                 className="btn btn-sm editspan mx-1"
                 onClick={() => handleRemove(row.TestimonialID)}
-                uk-tooltip="Delete"
+                uk-tooltip="delete"
               >
                 <AiOutlineDelete />
               </button>{" "}
@@ -158,10 +166,11 @@ const User = () => {
                 className="btn btn-sm editspan mx-1"
                 onClick={() => handleAdd(rowPrev)}
                 uk-tooltip="Add"><AiOutlinePlus/></button>{" "}
+    
     <button type="button"
                 className="btn btn-sm editspan mx-1"
                 onClick={handleLogout}
-                uk-tooltip="back"><AiOutlineBackward /></button>{" "}
+                uk-tooltip="Logout"><AiOutlineLogout /></button>{" "}
       <Toast />
       {loading ? (
         <Spinner />
@@ -169,7 +178,7 @@ const User = () => {
         
         <DataTable
           columns={columns}
-          data={userList}
+          data={filteredUserList}
           customStyles={customStylesForImage}
           pagination
           paginationRowsPerPageOptions={[10, 20, 50, 100]} // Customizable options
@@ -181,32 +190,7 @@ const User = () => {
           dense
           striped
           subHeader
-          subHeaderComponent={
-            <>
-              {/* <div className=" w-100 ">
-                      <div className="d-flex uk-flex-middle justify-content-end">
-                        <div>
-                          <div class="uk-search uk-search-default">
-                            <AiOutlineSearch className="search-icon" />
-                            <input
-                              placeholder={
-                                mode === "en" ? "Search" : "खोजी गर्नुहोस्"
-                              }
-                              ref={searchInput}
-                              type="text"
-                              className="form-control form-control-sm searchField"
-                              onChange={searchHandler}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div> */}
-                    {/* <button type="button"
-                className="btn btn-sm editspan mx-1"
-                onClick={() => handleAdd(rowPrev)}
-                uk-tooltip="Add"><AiOutlinePlus/></button>{" "} */}
-            </>
-          }
+          
         />
         
       )}

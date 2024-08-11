@@ -28,7 +28,10 @@ const RemoveUser = ({ setRemovePop, removePop }) => {
     userData,
     userList,
     setUserList,
-    userId
+    userId,
+  
+  
+
   } = useContext(UserContext);
 
   useEffect(() => {
@@ -60,6 +63,8 @@ const RemoveUser = ({ setRemovePop, removePop }) => {
       
       closePopUp(); 
   };
+  
+  
 
   useEffect(() => {
     if (Object.keys(formErrors).length === 0 && addSubmit) {

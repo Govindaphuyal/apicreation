@@ -42,22 +42,25 @@ const [userName,setUserName]=useState("");
 const [password,setPassword]=useState("");
 const [isAuthenticated,setIsAuthenticated]=useState(false);
 
+const token = localStorage.getItem('authToken');
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
     if (token) {
       setIsAuthenticated(true);
     }
+    userLst()
     userBuddle();
-    userLst();
+    
     
   }, []);
-  const login = (token) => {
+  const Login=(token)=>{
     localStorage.setItem('authToken', token);
-    setIsAuthenticated(true);
-  };
-  const logout = () => {
+  }
+  const handleLogout = () => {
     localStorage.removeItem('authToken');
+    navigate('/'); 
     setIsAuthenticated(false);
+    setUserName("")
+    setPassword("")
   };
   const userLst = () => {
     const params = 
@@ -79,7 +82,7 @@ const [isAuthenticated,setIsAuthenticated]=useState(false);
       if (resp.StatusCode === 200) {
         const postResult = resp.Values ? resp.Values : "";
         setUserList(postResult);
-        setOriginalList(postResult);
+        //setOriginalList(postResult);
       } else {
         setUserList([]);
         setOriginalList([]);
@@ -105,7 +108,7 @@ const [isAuthenticated,setIsAuthenticated]=useState(false);
     Fetchdata(par).then((resp) => {
       if (resp.StatusCode === 200) {
         const postValue = resp.Values ? resp.Values : "";
-        setUserList(postValue);
+        //setUserList(postValue);
         setOriginalList(postValue);
       } else {
         setUserList([]);
@@ -133,6 +136,7 @@ const [isAuthenticated,setIsAuthenticated]=useState(false);
     setViewList({
       fullName: data.FullName,
       email: data.Email,
+      comment: data.Comment,
       comName: data.ComName,
       position: data.Position,
     });
@@ -143,6 +147,13 @@ const [isAuthenticated,setIsAuthenticated]=useState(false);
 
   const handleView = (data) => {
     setViewPop(true);
+    setViewList({
+      fullName: data.FullName,
+      email: data.Email,
+      comment: data.Comment,
+      comName: data.ComName,
+      position: data.Position,
+    });
   };
 
   const handleAdd = () => {
@@ -338,9 +349,9 @@ const [isAuthenticated,setIsAuthenticated]=useState(false);
         setPassword,
         isAuthenticated,
         setIsAuthenticated,
-        login,
-        logout,
-        navigate
+        handleLogout,
+        navigate,
+        Login
       }}
     >
       {props.children}

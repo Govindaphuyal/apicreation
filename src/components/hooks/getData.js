@@ -10,5 +10,9 @@ export const Fetchdata = async (dataToSend) => {
     });
     const cooptive = await response.json();
     return cooptive;
+  } else {
+    const response = await fetch(dataToSend.FetchURL);
+    const cooptive = await response.json();
+    return cooptive;
   }
-}
+};
